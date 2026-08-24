@@ -16,7 +16,7 @@ public class Publisher {
     private String name;
 
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "publisher")
     private List<Book> books;
 

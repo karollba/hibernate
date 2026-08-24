@@ -1,5 +1,6 @@
 package pl.coderslab.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import pl.coderslab.author.Author;
 
@@ -31,7 +32,19 @@ public class Book {
         this.publisher = publisher;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "book_author",

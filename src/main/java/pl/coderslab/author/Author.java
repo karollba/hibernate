@@ -1,5 +1,6 @@
 package pl.coderslab.author;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class Author {
     private String lastName;
 
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors")
     private List<Book> books = new ArrayList<>();
 

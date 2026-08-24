@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = "pl.coderslab")
+@EnableWebMvc
 @EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
 

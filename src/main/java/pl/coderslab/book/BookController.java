@@ -64,6 +64,10 @@ public class BookController {
         Book book = new Book();
         book.setTitle("Thinking in Java");
         book.setPublisher(publisher);
+
+        book.getAuthors().add(author1);
+        book.getAuthors().add(author2);
+
         bookDao.saveBook(book);
 
 
@@ -73,8 +77,7 @@ public class BookController {
         byId.setRatingBook(12);
         bookDao.update(byId);
 
-        book.getAuthors().add(author1);
-        book.getAuthors().add(author2);
+
 
         return "ok";
     }

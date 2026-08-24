@@ -51,6 +51,12 @@ public class BookController {
 //    }
 
 
+    @GetMapping("/bypublisher/{id}")
+    public List<Book> byPublisher(@PathVariable Long id) {
+        Publisher publisher = publisherDao.findPublisher(id);
+        return bookDao.findByPublisher(publisher);
+    }
+
     @GetMapping("/add")
     public String add() {
 

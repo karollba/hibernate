@@ -13,10 +13,6 @@ public class Person {
     private String email;
 
     public Person() {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email  = email;
     }
 
     @OneToOne
@@ -66,10 +62,10 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
+                "id=" + getId() +
+                ", login='" + getLogin() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", email='" + getEmail() + '\'' +
                 '}';
     }
 }

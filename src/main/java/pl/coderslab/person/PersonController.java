@@ -19,12 +19,24 @@ public class PersonController {
     }
 
     // dodawanie
-    @GetMapping("/add/{firstname}/{lastname}")
-    public String add(@PathVariable String login, @PathVariable String password) {
+    @GetMapping("/add/{login}/{password}")
+    public String add(@PathVariable String login, @PathVariable String password, @PathVariable String email) {
+        PersonDetails details = new PersonDetails();
+        details.setFirstName("Jan");
+        details.setLastName("Kowalski");
+        details.setCity("Warszawa");
+        details.setStreet("Marszalkowska");
+        details.setStreetNumber("1");
+        personDao.saveDetails(details);
+
+
         Person person = new Person();
         person.setLogin(login);
         person.setPassword(password);
+        person.setEmail(email);
+        person.setPersonDetails(details);
         personDao.savePerson(person);
+
         return "ok";
     }
 
@@ -40,7 +52,7 @@ public class PersonController {
 
 
     // edycja po id
-    @GetMapping("/update/{id}/{firstname}/{lastname}")
+    @GetMapping("/update/{id}//{login}/{password}")
     public String update(@PathVariable Long id, @PathVariable String login, @PathVariable String password) {
         Person person = personDao.findById(id);
         if (person == null) {

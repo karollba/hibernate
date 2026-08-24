@@ -15,9 +15,12 @@ public class PersonDetails {
     private String city;
 
 
-    @OneToOne(mappedBy = "person")
+    @OneToOne(mappedBy = "personDetails")
     private Person person;
 
+
+    public PersonDetails() {
+    }
     public Person getPerson() {
         return person;
     }
@@ -72,6 +75,19 @@ public class PersonDetails {
 
     public String getStreetNumber() {
         return streetNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonDetails{" +
+                "id=" + getId() +
+                ", firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", streetNumber='" + getStreetNumber() + '\'' +
+                ", street='" + getStreet() + '\'' +
+                ", city='" + getCity() + '\'' +
+                ", person=" + getPerson() +
+                '}';
     }
 }
 

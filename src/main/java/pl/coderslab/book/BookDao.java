@@ -35,4 +35,31 @@ public class BookDao {
         Query slectBFromBookB = entityManager.createQuery("select b from Book b", Book.class);
         return slectBFromBookB.getResultList();
     }
+
+    // wyszukaj po rating
+    public List<Book> findAllByRating(int rating) {
+        Query selectBFromBookB = entityManager.createQuery("select b from Book b where b.ratingBook = :rat", Book.class);
+        selectBFromBookB.setParameter("rat", rating);
+        return selectBFromBookB.getResultList();
+    }
+
+    // wyszkuja ktore posiadaja publishera
+    public List<Book> findAllByPublisher() {
+        Query findPublisher = entityManager.createQuery("select b from Book b where b.publisher is not null", Book.class);
+        return findPublisher.getResultList();
+    }
+
+    // wyszukaj po wydawcy
+    public List<Book> findByPublisher(Long id) {
+        Query selectByPublisher = entityManager.createQuery("select b from Book b where b.publisher = :publisher", Book.class);
+        selectByPublisher.setParameter("publisher", id);
+        return selectByPublisher.getResultList();
+    }
+
+//    wyszukaj po autorze
+    public List<Book> findByAuthor(String author) {
+        Query selectByAuthor = entityManager.createQuery("select b from Book b where b.authors = :author", Book.class);
+        selectByAuthor.setParameter("author", author);
+        return selectByAuthor.getResultList();
+    }
 }

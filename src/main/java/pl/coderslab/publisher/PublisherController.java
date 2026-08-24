@@ -4,31 +4,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.coderslab.book.Publisher;
+import pl.coderslab.book.PublisherDao;
 
 
 @RestController
 @RequestMapping("/publisher")
 public class PublisherController {
 
-    private final PublisherDao2 publisherDao;
+    private final PublisherDao publisherDao;
 
-    public PublisherController(PublisherDao2 publisherDao) {
+    public PublisherController(PublisherDao publisherDao) {
         this.publisherDao = publisherDao;
     }
 
     // dodawanie
     @GetMapping("/add/{name}")
     public String add(@PathVariable String name){
-        Publisher2 publisher = new Publisher2();
+        Publisher publisher = new Publisher();
         publisher.setName(name);
-        publisherDao.savePublisher(publisher);
+        publisherDao.save(publisher);
         return "ok";
     }
 
     // pobieranie po id
     @GetMapping("/get/{id}")
     public String get(@PathVariable Long id){
-        Publisher2 publisher = publisherDao.findPublisher(id);
+        Publisher publisher = publisherDao.findPublisher(id);
         if (publisher == null) {
             return "Nie znaleziono wydawcy o id " + id;
         }
@@ -39,7 +41,7 @@ public class PublisherController {
     // edycja po id
     @GetMapping("/update/{id}/{publisherName}")
     public String update(@PathVariable Long id, @PathVariable String publisherName){
-        Publisher2 publisher = publisherDao.findPublisher(id);
+        Publisher publisher = publisherDao.findPublisher(id);
         if (publisher == null) {
             return "Nie znaleziono wydawcy o id " + id;
         }
@@ -52,7 +54,7 @@ public class PublisherController {
     // usuwanie po id
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id){
-        Publisher2 publisher = publisherDao.findPublisher(id);
+        Publisher publisher = publisherDao.findPublisher(id);
         if (publisher == null) {
             return "Nie znaleziono wydawcy o id " + id;
         }

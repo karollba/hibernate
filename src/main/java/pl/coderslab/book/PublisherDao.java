@@ -20,6 +20,7 @@ public class PublisherDao {
         entityManager.persist(publisher);
     }
 
+
     public List<Publisher> findAllPublishers() {
         Query allPublishers = entityManager.createQuery("select p from Publisher p", Publisher.class);
         return  allPublishers.getResultList();

@@ -1,15 +1,9 @@
 package pl.coderslab.book;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.author.Author;
 import pl.coderslab.author.AuthorDao;
-import pl.coderslab.book.Publisher;
-import pl.coderslab.book.PublisherDao;
 
-import javax.swing.undo.AbstractUndoableEdit;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -57,7 +51,9 @@ public class BookController {
         return bookDao.findByPublisher(publisher);
     }
 
+
     @GetMapping("/add")
+    @ResponseBody
     public String add() {
 
         Author author1 = authorDao.findAuthorById(1L);
@@ -76,14 +72,12 @@ public class BookController {
 
         bookDao.saveBook(book);
 
+        Book byId = bookDao.findById(book.getId());
 
-
-        Book byId = bookDao.findById(1);
         System.out.println(byId.getId());
+
         byId.setRatingBook(12);
         bookDao.update(byId);
-
-
 
         return "ok";
     }

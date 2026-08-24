@@ -50,9 +50,9 @@ public class BookDao {
     }
 
     // wyszukaj po wydawcy
-    public List<Book> findByPublisher(Long id) {
+    public List<Book> findByPublisher(Publisher publisher) {
         Query selectByPublisher = entityManager.createQuery("select b from Book b where b.publisher = :publisher", Book.class);
-        selectByPublisher.setParameter("publisher", id);
+        selectByPublisher.setParameter("publisher", publisher);
         return selectByPublisher.getResultList();
     }
 

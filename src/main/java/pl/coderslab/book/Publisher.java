@@ -14,7 +14,24 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String nip;
+    private String regon;
 
+    public String getNip() {
+        return nip;
+    }
+
+    public void setNip(String nip) {
+        this.nip = nip;
+    }
+
+    public String getRegon() {
+        return regon;
+    }
+
+    public void setRegon(String regon) {
+        this.regon = regon;
+    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "publisher")
@@ -42,5 +59,15 @@ public class Publisher {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public String toString() {
+        return "Publisher{" +
+                "id=" + getId() +
+                ", name='" + getName() + '\'' +
+                ", nip='" + getNip() + '\'' +
+                ", regon='" + getRegon() + '\'' +
+                '}';
     }
 }

@@ -20,11 +20,16 @@ public class BookController {
     @Autowired
     private final BookRepository bookRepository;
 
-    public BookController(BookDao bookDao, PublisherDao publisherDao, BookRepository bookRepository, AuthorDao authorDao) {
+    @Autowired
+    private final CategoryRepository categoryRepository;
+
+
+    public BookController(BookDao bookDao, PublisherDao publisherDao, BookRepository bookRepository, AuthorDao authorDao, CategoryRepository categoryRepository) {
         this.bookDao = bookDao;
         this.publisherDao = publisherDao;
         this.bookRepository = bookRepository;
         this.authorDao = authorDao;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/all2")
@@ -53,42 +58,7 @@ public class BookController {
     public String addCategory(){
         Category category = new Category();
         category.setName("programming");
-        return "ok";
-    }
-
-
-    @Autowired
-    private final CategoryRepository categoryRepository;
-
-
-
-    //     dodawanie
-    @GetMapping("/add/{title}/{description}/{rating}")
-    public String add(@PathVariable String title, @PathVariable String description, @PathVariable int rating){
-
-        Category category = new Category();
-        category.setName("Programming");
         categoryRepository.save(category);
-
-        Publisher publisher = new Publisher();
-        publisher.setName("PWN");
-        publisherDao.save(publisher);
-
-        Book book = new Book();
-        book.setTitle(title);
-        book.setDescription(description);
-        book.setRatingBook(rating);
-        book.setCreatedOn(LocalDateTime.now());
-
-        book.setPublisher(publisher);
-        book.setCategory(category);
-
-        book.setCategory(category);
-
-        Author author = new Author();
-        author.getId();
-
-        bookDao.saveBook(book);
         return "ok";
     }
 
@@ -104,6 +74,10 @@ public class BookController {
     @ResponseBody
     public String add() {
 
+        Category category = new Category();
+        category.setName("Programming");
+        categoryRepository.save(category);
+
         Author author1 = authorDao.findAuthorById(1L);
         Author author2 = authorDao.findAuthorById(2L);
 
@@ -117,6 +91,8 @@ public class BookController {
 
         book.getAuthors().add(author1);
         book.getAuthors().add(author2);
+
+        book.setCategory(category);
 
         bookDao.saveBook(book);
 
@@ -171,7 +147,70 @@ public class BookController {
     public List<Book> allBooks() {
         return bookDao.findAll();
     }
+
+
+
+    // zadania z tworzenia zapytan
+
+    @GetMapping("/byauthor/{id}")
+    public List<Book> byAuthor(@PathVariable Long id) {
+        Author author = authorDao.findAuthorById(id);
+        return bookRepository.findByAuthors(author);
+    }
+
+    @GetMapping("/bypublisher2/{id}")
+    public List<Book> byPublisher2(@PathVariable Long id) {
+        Publisher publisher = publisherDao.findPublisher(id);
+        return bookRepository.findByPublisher(publisher);
+    }
+
+    @GetMapping("/byrating/{rating}")
+    public List<Book> byRating(@PathVariable int rating) {
+        return bookRepository.findByRatingBook(rating);
+    }
+
+    @GetMapping("/firstbycategory/{id}")
+    public Book firstByCategory(@PathVariable Long id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        return bookRepository.findFirstByCategoryOrderByTitleAsc(category);
+    }
+
+
 }
+
+
+
+
+
+//     dodawanie
+//    @GetMapping("/add/{title}/{description}/{rating}")
+//    public String add(@PathVariable String title, @PathVariable String description, @PathVariable int rating){
+//
+//        Category category = new Category();
+//        category.setName("Programming");
+//        categoryRepository.save(category);
+//
+//        Publisher publisher = new Publisher();
+//        publisher.setName("PWN");
+//        publisherDao.save(publisher);
+//
+//        Book book = new Book();
+//        book.setTitle(title);
+//        book.setDescription(description);
+//        book.setRatingBook(rating);
+//        book.setCreatedOn(LocalDateTime.now());
+//
+//        book.setPublisher(publisher);
+//        book.setCategory(category);
+//
+//        book.setCategory(category);
+//
+//        Author author = new Author();
+//        author.getId();
+//
+//        bookDao.saveBook(book);
+//        return "ok";
+//    }
 
 
 

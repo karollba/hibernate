@@ -19,6 +19,8 @@ public class Author {
     private Long id;
     private String firstName;
     private String lastName;
+    private String email;
+    private String pesel;
 
 
     @JsonIgnore
@@ -31,6 +33,22 @@ public class Author {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(String pesel) {
+        this.pesel = pesel;
     }
 
     public Long getId() {
@@ -59,6 +77,6 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Autor: " + getFirstName() + " " + getLastName() + " | id: " + getId();
+        return "Autor: " + getFirstName() + " " + getLastName() + " | id: " + getId() +  " | email: "+ getEmail() +  " | pesel: " + getPesel();
     }
 }

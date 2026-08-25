@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.coderslab.book.Book;
 
 import java.util.List;
 
@@ -109,6 +110,20 @@ public class AuthorController {
     @GetMapping("/bylastname/{lastName}")
     public List<Author> byLastName(@PathVariable String lastName) {
         return authorRepository.findByLastName(lastName);
+    }
+
+
+
+    // zapytania szczegolowe @QUery
+
+    @GetMapping("/byemailprefix/{prefix}")
+    public List<Author> byEmailPrefixQuery(@PathVariable String prefix) {
+        return authorRepository.findByEmailQuery(prefix);
+    }
+
+    @GetMapping("/bypeselprefix/{prefix}")
+    public List<Author> byPeselPrefixQuery(@PathVariable String prefix) {
+        return authorRepository.findByPeselQuery(prefix);
     }
 
 }

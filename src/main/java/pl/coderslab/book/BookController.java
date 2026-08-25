@@ -1,6 +1,7 @@
 package pl.coderslab.book;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.author.Author;
 import pl.coderslab.author.AuthorDao;
@@ -173,6 +174,35 @@ public class BookController {
     public Book firstByCategory(@PathVariable Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
         return bookRepository.findFirstByCategoryOrderByTitleAsc(category);
+    }
+
+
+    // zapytania szczegolowe @QUery
+
+    @GetMapping("/bytitlequery/{title}")
+    public List<Book> findByTitleQuery(@PathVariable String title) {
+        return bookRepository.findBookByTitleWithQuery(title);
+    }
+
+    @GetMapping("/bycategoryquery/{category}")
+    public List<Book> findByCategoryQuery(@PathVariable String category) {
+        return bookRepository.findWithQueryByCategory(category);
+    }
+
+    @GetMapping("/bypublisherquery/{publisher}")
+    public List<Book> findByPublisherQuery(@PathVariable Publisher publisher) {
+        return bookRepository.findByPublisherQuery(publisher);
+    }
+
+    @GetMapping("/byratingquery/{minRating}/{maxRating}")
+    public List<Book> findByPublisherQuery(@PathVariable int minRating,
+                                           @PathVariable int maxRating) {
+        return bookRepository.findByRatingQuery(minRating, maxRating);
+    }
+
+    @GetMapping("/bycategoryascquery/{category}")
+    public List<Book> findByCategoryAscQuery(@PathVariable String category) {
+        return bookRepository.findFirstByTitleQuery(category);
     }
 
 

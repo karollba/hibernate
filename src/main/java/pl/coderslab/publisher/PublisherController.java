@@ -8,108 +8,75 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.coderslab.book.Publisher;
 import pl.coderslab.book.PublisherDao;
 import pl.coderslab.book.PublisherRepository;
+import pl.coderslab.book.PublisherService;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping("/publisher")
 public class PublisherController {
 
-    private final PublisherDao publisherDao;
+    private final PublisherService publisherService;
 
-    @Autowired
-    private PublisherRepository publisherRepository;
-
-    public PublisherController(PublisherDao publisherDao) {
-        this.publisherDao = publisherDao;
+    public PublisherController(PublisherService publisherService) {
+        this.publisherService = publisherService;
     }
 
+    @GetMapping("/all")
+    public List<Publisher> all() {
+        return publisherService.findAll();
+    }
 
     // wyszukiwanie po nip
-
     @GetMapping("/bynip/{nip}")
-    public String byNip(@PathVariable String nip) {
-        Publisher publisher = publisherRepository.findByNip(nip);
-        if (publisher == null) {
-            return "Nie znaleziono wydawcy o nr nip: " + nip;
-        }
-
-        return  publisher.toString();
+    public Publisher byNip(@PathVariable String nip) {
+        return publisherService.findByNip(nip);
     }
 
     @GetMapping("/byregon/{regon}")
-    public String byRegon(@PathVariable String regon) {
-        Publisher publisher = publisherRepository.findByRegon(regon);
-        if (publisher == null) {
-            return "Nie znaleziono wydawcy o nr regon: " + regon;
-        }
-
-        return  publisher.toString();
+    public Publisher byRegon(@PathVariable String regon) {
+        return publisherService.findByRegon(regon);
     }
 
     // dodawanie
     @GetMapping("/add/{name}/{nip}/{regon}")
     public String add(@PathVariable String name,
                       @PathVariable String nip,
-                      @PathVariable String regon){
+                      @PathVariable String regon) {
 
         Publisher publisher = new Publisher();
         publisher.setName(name);
         publisher.setNip(nip);
         publisher.setRegon(regon);
-        publisherDao.save(publisher);
+        publisherService.save(publisher);
         return "ok";
     }
 
     // pobieranie po id
     @GetMapping("/get/{id}")
-    public String get(@PathVariable Long id){
-        Publisher publisher = publisherDao.findPublisher(id);
-        if (publisher == null) {
-            return "Nie znaleziono wydawcy o id " + id;
-        }
-        return publisher.toString();
+    public Publisher get(@PathVariable Long id) {
+        return publisherService.findById(id);
     }
 
-
-    // edycja po id
-//    @GetMapping("/update/{id}/{nip}/{regon}")
-//    public String update(@PathVariable Long id,
-//                         @PathVariable String nip,
-//                         @PathVariable String regon){
-//        Publisher publisher = publisherDao.findPublisher(id);
-//        if (publisher == null) {
-//            return "Nie znaleziono wydawcy o id " + id;
-//        }
-//        publisher.setNip(nip);
-//        publisher.setRegon(regon);
-//        publisherDao.updatePublisher(publisher);
-//
-//        return "Zaktualizowano: " + publisher.getName();
-//    }
-
-    // edycja po id
-    @GetMapping("/update/{id}/{publisherName}")
-    public String update(@PathVariable Long id, @PathVariable String publisherName){
-        Publisher publisher = publisherDao.findPublisher(id);
-        if (publisher == null) {
-            return "Nie znaleziono wydawcy o id " + id;
+    @GetMapping("/update/{id}/{publisherName}/{nip}/{regon}")
+    public String update(@PathVariable Long id,
+                         @PathVariable String publisherName,
+                         @PathVariable String nip,
+                         @PathVariable String regon) {
+        if (!publisherService.exists(id)) {
+            return "Not found id: " + id;
         }
-        publisher.setName(publisherName);
-        publisherDao.updatePublisher(publisher);
-
-        return "Zaktualizowano: " + publisher.getName();
+        publisherService.update(id, publisherName, nip, regon);
+        return "Updated: " + id;
     }
 
-    // usuwanie po id
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-        Publisher publisher = publisherDao.findPublisher(id);
-        if (publisher == null) {
-            return "Nie znaleziono wydawcy o id " + id;
+    public String delete(@PathVariable Long id) {
+        if (!publisherService.exists(id)) {
+            return "nie znaleziono id" + id;
         }
-
-        publisherDao.deletePublisher(publisher);
-        return "Usunięto wydawcę o id: " + id;
+        publisherService.delete(id);
+        return "Usunieto " + id;
     }
-
 }

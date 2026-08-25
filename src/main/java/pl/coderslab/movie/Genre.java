@@ -1,5 +1,6 @@
 package pl.coderslab.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class Genre {
     private String name;
 
    @ManyToMany(mappedBy = "genres")
+   @JsonIgnore
     private List<Movie> movies = new ArrayList<>();
 
 }

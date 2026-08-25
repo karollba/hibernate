@@ -1,12 +1,12 @@
 package pl.coderslab.movie;
 
 import jakarta.annotation.security.PermitAll;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movie")
@@ -21,27 +21,15 @@ public class MovieController {
         this.genreRepository = genreRepository;
     }
 
-    @PostMapping
-    public Movie addMovie(@RequestBody Movie movie) {
-        return movieRepository.save(movie);
-    }
 
-    @GetMapping("/{id}")
-    public Movie getMovie(@PathVariable Long id) {
-        return movieRepository.findById(id).orElse(null);
+    @GetMapping("/get/{id}")
+    public MovieDTO get(@PathVariable Long id) {
+        Movie movie = movieRepository.findById(id).orElse(null);
+        if (movie == null) {
+            return null;
+        }
+        return new MovieDTO(movie);
     }
-
-    @GetMapping
-    public List<Movie> allMovies() {
-        return movieRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Movie update(@PathVariable Long id, @RequestBody Movie movie) {
-        movie.setId(id);
-        return movieRepository.save(movie);
-    }
-
 
     // genres
     @GetMapping("/addgenre/{name}")
@@ -52,31 +40,48 @@ public class MovieController {
         return "ok";
     }
 
-    @GetMapping("/addgenretomovie/{title}/{year}")
+    @GetMapping("/addmovie/{title}/{year}/{genre}/{rating}")
     public String addGenreToMovie(@PathVariable String title,
-                                  @PathVariable int year) {
+                                  @PathVariable int year,
+                                  @PathVariable String genre,
+                                  @PathVariable int rating) {
 
-        Genre genre1 = genreRepository.findById(1L).orElse(null);
-        Genre genre2 = genreRepository.findById(2L).orElse(null);
+        Genre genreEntity = genreRepository.findByName(genre);
+
+        if (genre == null) {
+            return null;
+        }
 
         Movie movie = new Movie();
         movie.setTitle(title);
         movie.setReleaseYear(year);
+        movie.setRating(rating);
+        movie.getGenres().add(genreEntity);
 
         movieRepository.save(movie);
         return "ok";
     }
 
     @GetMapping("/all")
-    public List<Movie> all() {
-        return movieRepository.findAll();
+    public List<MovieDTO> all() {
+        return movieRepository.findAll()
+                .stream()
+                .map(MovieDTO::new)
+                .collect(Collectors.toList());
     }
 
+
+
     @GetMapping("/bygenre/{id}")
-    public List<Movie> byGenreId(@PathVariable Long id) {
+    public List<MovieDTO> byGenreId(@PathVariable Long id) {
         Genre genre = genreRepository.findById(id).orElse(null);
-        return movieRepository.findMoviesByGenres(genre);
+        return movieRepository.findMoviesByGenres(genre)
+                .stream()
+                .map(MovieDTO::new)
+                .collect(Collectors.toList());
     }
+
+
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {

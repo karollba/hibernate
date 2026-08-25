@@ -13,22 +13,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MovieController {
 
-    private final MovieRepository movieRepository;
+//    private final MovieRepository movieRepository;
     private final GenreRepository genreRepository;
+    private final MovieService movieService;
 
-    public MovieController(MovieRepository movieRepository, GenreRepository genreRepository) {
-        this.movieRepository = movieRepository;
+    public MovieController(GenreRepository genreRepository, MovieService movieService) {
+//        this.movieRepository = movieRepository;
         this.genreRepository = genreRepository;
+        this.movieService = movieService;
     }
 
 
     @GetMapping("/get/{id}")
     public MovieDTO get(@PathVariable Long id) {
-        Movie movie = movieRepository.findById(id).orElse(null);
-        if (movie == null) {
-            return null;
-        }
-        return new MovieDTO(movie);
+      return movieService.findById(id);
     }
 
     // genres
@@ -58,38 +56,31 @@ public class MovieController {
         movie.setRating(rating);
         movie.getGenres().add(genreEntity);
 
-        movieRepository.save(movie);
+        movieService.save(movie);
         return "ok";
     }
 
     @GetMapping("/all")
     public List<MovieDTO> all() {
-        return movieRepository.findAll()
-                .stream()
-                .map(MovieDTO::new)
-                .collect(Collectors.toList());
+       return movieService.findAll();
     }
 
 
 
     @GetMapping("/bygenre/{id}")
     public List<MovieDTO> byGenreId(@PathVariable Long id) {
-        Genre genre = genreRepository.findById(id).orElse(null);
-        return movieRepository.findMoviesByGenres(genre)
-                .stream()
-                .map(MovieDTO::new)
-                .collect(Collectors.toList());
+      return movieService.findByGenre(id);
     }
 
 
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        if (!movieRepository.existsById(id)) {
-            return "nie znaleziono movie o id " +  id;
+        if (!movieService.exists(id)) {
+            return "Nie znaleziono filmu o id: " + id;
         }
-        movieRepository.deleteById(id);
-        return "Usunieto film o id " + id;
+        movieService.delete(id);
+        return "Usunieto film o id: " + id;
     }
 
 }

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -19,14 +18,14 @@ public class MovieDTO {
     public MovieDTO() {
     }
 
-    public MovieDTO(Movie movie) {
-        this.id = movie.getId();
-        this.title = movie.getTitle();
-        this.releaseYear = movie.getReleaseYear();
-        this.rating = movie.getRating();
-        this.genres = movie.getGenres()
-                .stream()
-                .map(Genre::getName)
-                .toList();
-    }
+//    public MovieDTO(Movie movie) {
+//        this.id = movie.getId();
+//        this.title = movie.getTitle();
+//        this.releaseYear = movie.getReleaseYear();
+//        this.rating = movie.getRating();
+//        this.genres = movie.getGenres()
+//                .stream()
+//                .map(Genre::getName)
+//                .toList();
+//    }
 }
